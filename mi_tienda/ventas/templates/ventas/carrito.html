@@ -1,0 +1,61 @@
+{% extends "ventas/base.html" %}
+{% load cart_filters %}
+{% block title %} Carrito {% endblock %}
+{% block content %}
+
+<section class="bg-light">
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col-lg-12 mt-5">
+                <h1 class="h2">Carrito de compras</h1>
+                {% if carrito %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Producto</th>
+                                <th>Tamaño</th>
+                                <th>Cantidad</th>
+                                <th>Precio unidad</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in carrito.items.all %}
+                                <tr>
+                                    <td><img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}" width="50"></td>
+                                    <td>{{ item.producto.nombre }}</td>
+                                    <td>{{ item.producto.tamaño }}</td>
+                                    <td>
+                                        <a href="{% url 'decrementar_cantidad' item.id %}" class="btn btn-secondary btn-sm">-</a>
+                                        {{ item.cantidad }}
+                                        <a href="{% url 'incrementar_cantidad' item.id %}" class="btn btn-secondary btn-sm">+</a>
+                                    </td>
+                                    <td>${{ item.producto.precio }}</td>
+                                    <td>${{ item.cantidad|mul:item.producto.precio }}</td>
+                                    <td>
+                                        <a href="{% url 'eliminar_del_carrito' item.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <h3>Total: ${{ carrito.items.all|sum_total }}</h3>
+                        <div class="row pb-3">
+                            <div class="col d-grid">
+                                <a href="{% url 'comprar_carrito' %}" class="btn btn-success btn-lg">Comprar</a>
+                            </div>
+                            <div class="col d-grid">  
+                                <a href="{% url 'compras' %}"  class="btn btn-success btn-lg">Volver a productos</a>
+                            </div>
+                        </div>
+                {% else %}
+                    <p>Tu carrito está vacío.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

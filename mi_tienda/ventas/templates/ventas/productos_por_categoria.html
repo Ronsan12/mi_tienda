@@ -1,0 +1,43 @@
+{% extends "ventas/base.html" %}
+{% load static %}
+{% block title %} Productos por Categoría {% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-3">
+            <h1 class="h2 pb-4">Tamaño</h1>
+            <select id="filtro-tamaño" class="form-select">
+                <option value="">Todos</option>
+                <option value="Grande" {% if tamaño_seleccionado == 'Grande' %}selected{% endif %}>Grande</option>
+                <option value="Pequeño" {% if tamaño_seleccionado == 'Pequeño' %}selected{% endif %}>Pequeño</option>
+            </select>
+        </div>
+        <div class="col-lg-9">
+            <!-- Aquí va la lista de productos de la categoría -->
+            {% for producto in productos %}
+            <div class="col-md-4">
+                <div class="card mb-4 product-wap rounded-0">
+                    <div class="card rounded-0">
+                        <img class="card-img rounded-0 img-fluid" src="{{ producto.imagen.url }}">
+                        <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                            <ul class="list-unstyled">
+                                <li><a class="btn btn-success text-white mt-2" href="{% url 'product_detail' producto.id %}"><i class="fas fa-cart-plus"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <a href="#" class="h3 text-decoration-none">{{ producto.nombre }}</a>
+                        <ul class="text-align-left mb-0">
+                            <li>Tamaño: {{ producto.tamaño }}</li>
+                            <li>Color: {{ producto.color }}</li>
+                            <li>Tipo de tela: {{ producto.tipo }}</li>
+                        </ul>
+                        <p class="text-center mb-0">Precio: ${{ producto.precio|floatformat:0 }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
